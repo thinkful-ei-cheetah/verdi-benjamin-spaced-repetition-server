@@ -1,3 +1,5 @@
+'use strict';
+
 const LanguageService = {
   getUsersLanguage(db, user_id) {
     return db
@@ -10,7 +12,7 @@ const LanguageService = {
         'language.total_score',
       )
       .where('language.user_id', user_id)
-      .first()
+      .first();
   },
 
   getLanguageWords(db, language_id) {
@@ -26,8 +28,8 @@ const LanguageService = {
         'correct_count',
         'incorrect_count',
       )
-      .where({ language_id })
+      .where({ language_id });
   },
-}
+};
 
-module.exports = LanguageService
+module.exports = LanguageService;
