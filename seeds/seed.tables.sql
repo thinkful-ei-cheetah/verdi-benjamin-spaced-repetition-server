@@ -1,9 +1,9 @@
 BEGIN;
 
 TRUNCATE
-  "word",
-  "language",
-  "user";
+  word,
+  language,
+  user;
 
 INSERT INTO "user" ("id", "username", "name", "password")
 VALUES
