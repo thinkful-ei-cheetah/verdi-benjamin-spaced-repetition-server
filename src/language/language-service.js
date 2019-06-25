@@ -1,4 +1,5 @@
 'use strict';
+const LinkedList = require('../LinkedList');
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {
@@ -41,6 +42,12 @@ const LanguageService = {
       )
       .where({ id })
   },
+
+  getResult(db, something) {
+    const sll = new LinkedList();
+  }
+
+  
 };
 
 module.exports = LanguageService;

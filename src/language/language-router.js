@@ -3,7 +3,6 @@
 const express = require('express');
 const LanguageService = require('./language-service');
 const { requireAuth } = require('../middleware/jwt-auth');
-const LinkedList = require('../LinkedList');
 
 const languageRouter = express.Router();
 
@@ -70,17 +69,19 @@ languageRouter
 languageRouter
   .post('/guess', async (req, res, next) => {
     try {
-      const sll = new LinkedList();
-      const word = await LanguageService.getNextWord(
+      const { answer } = req.body;
+
+      
+
+      const result = await LanguageService.getResult(
         req.app.get('db'),
-        req.language.head
+        answer
       );
 
+
+
       res.json({
-        nextWord: word.original,
-        totalScore: req.language.total_score,
-        wordCorrectCount: word.correct_count,
-        wordIncorrectCount: word.incorrect_count,
+   
       });
       next();
     } catch (error) {
