@@ -78,17 +78,17 @@ const LanguageService = {
   // },
 
   correctAnswer(db, word) {
-    let { memory_value: memVal, id, correct_count} = word;
+    let { memory_value: memVal, id, correct_count: count} = word;
     
     memVal = memVal * 2;
-    correct_count++;
+    count++;
 
     db
       .from('word')
       .where({ id })
       .update({
         'memory_value': memVal,
-        'correct_count': correct_count,
+        'correct_count': count,
       });
     
     return memVal;
@@ -139,13 +139,11 @@ const LanguageService = {
   },
 
   updateLinkedList(word, memVal) {
-    console.log('removing', word.original, word.id, 'memVal', memVal);
+    
     sll.remove({
       original: word.original,
       id: word.id
     });
-    console.log('removed');
-    sll.display();
 
     sll.insertAt({
       original: word.original,
@@ -154,8 +152,7 @@ const LanguageService = {
       memVal
     );
     
-    console.log('new list');
-    sll.display();
+    return;
   },
 
   updateNext(db, original, next) {
@@ -169,9 +166,10 @@ const LanguageService = {
     let currentNode = sll.head;
 
     while (currentNode !== null) {
-      
+      let word = currentNode.value.original;
+      let next = currentNode.next ? currentNode.next.value.id : null;
 
-      // await this.updateNext(db, currentNode.value, currentNode.next);
+      await this.updateNext(db, word, next);
 
       currentNode = currentNode.next;
     }
