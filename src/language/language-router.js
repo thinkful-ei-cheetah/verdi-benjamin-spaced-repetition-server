@@ -142,7 +142,7 @@ languageRouter
       
       res.json({
           nextWord: nextWord.original,
-          totalScore: score.total_score,
+          totalScore: score,
           wordCorrectCount: nextWord.correct_count,
           wordIncorrectCount: nextWord.incorrect_count,
           answer: currentWord.translation,

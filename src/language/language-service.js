@@ -64,19 +64,6 @@ const LanguageService = {
       .where('id', language_id)
   },
 
-  // serializeWord(word) {
-  //   return {
-  //     id: word.id,
-  //     original: word.original,
-  //     translation: word.translation,
-  //     memory_value: word.memory_value,
-  //     correct_count: word.correct_count,
-  //     incorrect_count: word.incorrect_count,
-  //     language_id: word.language_id,
-  //     next: word.next,
-  //   }
-  // },
-
   async correctAnswer(db, word) {
     let { memory_value: memVal, id, correct_count: count} = word;
     
@@ -121,9 +108,9 @@ const LanguageService = {
       .first(
         'total_score',
       )
-      .where('id', language_id);
-
-  },
+      .where('id', language_id)
+      .then(res => res.total_score);
+    },
 
   createLinkedList(words) {
     sll.head = null;
