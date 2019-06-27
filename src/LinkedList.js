@@ -44,11 +44,11 @@ class LinkedList {
     let count = 0;
 
     while (currentNode.next !== null) {
-      count++;
       if (count === position) {
         this.insertBefore(insertItem, currentNode.value);
       }
       currentNode = currentNode.next;
+      count++;
     }
   }
 

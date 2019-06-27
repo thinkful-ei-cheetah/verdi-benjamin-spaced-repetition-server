@@ -135,11 +135,11 @@ const LanguageService = {
   },
 
   updateLinkedList(word, memVal) {
+    console.log('removing', word.original, 'memVal', memVal);
     sll.remove(word.original);
-
     sll.insertAt(word.original, memVal);
-
-    console.log('displaying updated list')
+    
+    console.log('new list');
     sll.display();
   },
 

@@ -132,7 +132,6 @@ languageRouter
       );
       //update linked list
       await LanguageService.updateLinkedList(
-        req.app.get('db'),
         currentWord,
         memVal
       )
