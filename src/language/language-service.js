@@ -47,14 +47,14 @@ const LanguageService = {
         'next',
         'language_id',
       )
-      .where({ id })
+      .where({ id });
   },
 
   updateHead(db, language_id, head) {
     return db
       .from('language')
       .where('id', language_id)
-      .update({ head })
+      .update({ head });
   },
 
   getHead(db, language_id) {

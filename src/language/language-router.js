@@ -56,7 +56,7 @@ languageRouter
       const head = await LanguageService.getHead(
         req.app.get('db'),
         req.language.id
-      )
+      );
       
       const word = await LanguageService.getWord(
         req.app.get('db'),
@@ -64,10 +64,10 @@ languageRouter
       );
       
       res.json({
-          nextWord: word.original,
-          totalScore: req.language.total_score,
-          wordCorrectCount: word.correct_count,
-          wordIncorrectCount: word.incorrect_count,
+        nextWord: word.original,
+        totalScore: req.language.total_score,
+        wordCorrectCount: word.correct_count,
+        wordIncorrectCount: word.incorrect_count,
       });
       req.word = word;
       next();
