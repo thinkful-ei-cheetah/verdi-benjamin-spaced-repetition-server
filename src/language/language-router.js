@@ -36,6 +36,10 @@ languageRouter
         req.language.id,
       );
 
+      await LanguageService.createLinkedList(
+        words
+      );
+
       res.json({
         language: req.language,
         words,
@@ -49,9 +53,14 @@ languageRouter
 languageRouter
   .get('/head', async (req, res, next) => {
     try {
+      const head = await LanguageService.getHead(
+        req.app.get('db'),
+        req.language.id
+      )
+      
       const word = await LanguageService.getWord(
         req.app.get('db'),
-        req.language.head
+        head.head
       );
       
       res.json({
@@ -74,51 +83,64 @@ languageRouter
     try {
       const { guess } = req.body;
       const { id: lang_id, head } = req.language;
-      let result;
+      let result, memVal;
 
       if (!guess) {
         return res.status(400).json({
           error: `Missing 'guess' in request body`
         })
       }
-      
+      //get db values for the current word
       const currentWord = await LanguageService.getWord(
         req.app.get('db'),
         head,
         );
-      
+      //compare guess to translation
       if (guess === currentWord.translation) {
+        //set result to true, increment total score, call correct answer, store new memVal
         result = true;
         await LanguageService.incrementTotal(
           req.app.get('db'),
           lang_id
         );
-        await LanguageService.correctAnswer(
+        memVal = await LanguageService.correctAnswer(
           req.app.get('db'),
           currentWord);
       } else {
+        //set result to false, call incorrect answer, set memVal to 1
         result = false;
         await LanguageService.incorrectAnswer(
           req.app.get('db'),
           currentWord.id);
+        memVal = 1;
       }
-
+      //update head in database
       await LanguageService.updateHead(
         req.app.get('db'),
         lang_id,
         currentWord.next
       );
-
-      const nextWord = await LanguageService.getWord(
-        req.app.get('db'),
-        currentWord.next
-      );
-
+      //get updated total score
       const score = await LanguageService.getTotalScore(
         req.app.get('db'),
         lang_id
       );
-
+      //get db values for next word
+      const nextWord = await LanguageService.getWord(
+        req.app.get('db'),
+        currentWord.next
+      );
+      //update linked list
+      await LanguageService.updateLinkedList(
+        req.app.get('db'),
+        currentWord,
+        memVal
+      )
+      //update database
+      await LanguageService.updateDB(
+        req.app.get('db')
+      )    
+      
       res.json({
           nextWord: nextWord.original,
           totalScore: score.total_score,
@@ -127,6 +149,7 @@ languageRouter
           answer: currentWord.translation,
           isCorrect: result,
       });
+
       next();
     } catch (error) {
       next(error);

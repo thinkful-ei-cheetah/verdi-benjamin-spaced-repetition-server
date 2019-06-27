@@ -113,7 +113,6 @@ class LinkedList {
       currNode = currNode.next;
     }
     if (currNode === null) {
-      console.log('Item not found');
       return;
     }
     previousNode.next = currNode.next;

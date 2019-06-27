@@ -1,5 +1,7 @@
 'use strict';
 const LinkedList = require('../LinkedList');
+// const knex = require('knex');
+const sll = new LinkedList();
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {
@@ -54,6 +56,13 @@ const LanguageService = {
       .update({ head })
   },
 
+  getHead(db, language_id) {
+    return db
+      .from('language')
+      .first('head')
+      .where('id', language_id)
+  },
+
   // serializeWord(word) {
   //   return {
   //     id: word.id,
@@ -81,7 +90,7 @@ const LanguageService = {
         'correct_count': correct_count,
       });
     
-    return;
+    return memVal;
   },
 
   incrementTotal(db, language_id) {
@@ -95,9 +104,13 @@ const LanguageService = {
     db
       .from('word')
       .where({ id })
-      .increment('incorrect_count', 1)
-      .update('memory_value', 1);
-    
+      .increment('incorrect_count', 1);
+      
+    db
+      .from('word')
+      .where({ id })
+      .update('memory_value', 1)
+
     return;
   },
 
@@ -108,9 +121,33 @@ const LanguageService = {
         'total_score',
       )
       .where('id', language_id);
+
   },
 
-  
+  createLinkedList(words) {
+    sll.head = null;
+
+    for (let i = 0; i < words.length; i++) {
+      sll.insertLast(words[i].original, words[i].next)
+    }
+
+    sll.display();
+  },
+
+  updateLinkedList(word, memVal) {
+    sll.remove(word.original);
+
+    sll.insertAt(word.original, memVal);
+
+    console.log('displaying updated list')
+    sll.display();
+  },
+
+  updateDB(db) {
+
+    // while thing !== null
+    // LL.next -> db.next
+  }
 };
 
 module.exports = LanguageService;
