@@ -54,8 +54,7 @@ const LanguageService = {
     return db
       .from('language')
       .where('id', language_id)
-      .update({ head })
-      .then(res => res.head);
+      .update({ head });
   },
 
   getHead(db, language_id) {
