@@ -60,7 +60,7 @@ languageRouter
       
       const word = await LanguageService.getWord(
         req.app.get('db'),
-        head.head
+        head
       );
       
       res.json({

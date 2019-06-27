@@ -62,6 +62,7 @@ const LanguageService = {
       .from('language')
       .first('head')
       .where('id', language_id)
+      .then(res => res.head);
   },
 
   async correctAnswer(db, word) {
@@ -126,18 +127,21 @@ const LanguageService = {
   },
 
   updateLinkedList(word, memVal) {
-    
-    sll.remove({
+    const insertWord = {
       original: word.original,
       id: word.id
-    });
+    };
 
-    sll.insertAt({
-      original: word.original,
-      id: word.id
-      }, 
-      memVal
-    );
+    sll.remove(insertWord);
+
+    if (memVal >= sll.size()) {
+      insertLast(insertWord)
+    } else {
+      sll.insertAt(
+        insertWord, 
+        memVal
+      );
+    }
     
     return;
   },
