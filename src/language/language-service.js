@@ -77,13 +77,13 @@ const LanguageService = {
   //   }
   // },
 
-  correctAnswer(db, word) {
+  async correctAnswer(db, word) {
     let { memory_value: memVal, id, correct_count: count} = word;
     
     memVal = memVal * 2;
     count++;
 
-    db
+    await db
       .from('word')
       .where({ id })
       .update({
@@ -101,13 +101,13 @@ const LanguageService = {
       .increment('total_score', 1);
   },
 
-  incorrectAnswer(db, id) {
-    db
+  async incorrectAnswer(db, id) {
+    await db
       .from('word')
       .where({ id })
       .increment('incorrect_count', 1);
       
-    db
+    await db
       .from('word')
       .where({ id })
       .update('memory_value', 1)

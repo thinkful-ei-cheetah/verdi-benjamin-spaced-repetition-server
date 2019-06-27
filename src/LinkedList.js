@@ -100,7 +100,6 @@ class LinkedList {
     }
     // If the node to be removed is head, make the next node head
     if (_.isEqual(this.head.value, item)) {
-      console.log('removing head')
       this.head = this.head.next;
       return;
     }
@@ -123,7 +122,6 @@ class LinkedList {
   display() {
     let currentNode = this.head;
     while (currentNode !== null) {
-      console.log(currentNode.value);
       currentNode = currentNode.next;
     }
   }
@@ -135,7 +133,6 @@ class LinkedList {
       counter++;
       currentNode = currentNode.next;
     }
-    console.log(counter);
     return counter;
   }
 
@@ -170,7 +167,6 @@ class LinkedList {
     while (currentNode.next.next.next !== null) {
       currentNode = currentNode.next;
     }
-    console.log('third', currentNode.value);
     return currentNode;
   }
 
