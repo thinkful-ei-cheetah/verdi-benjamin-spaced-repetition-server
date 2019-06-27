@@ -152,7 +152,7 @@ describe('User Endpoints', function () {
           .send(newUser)
           .expect(res =>
             db
-              .from('user')
+              .from('users')
               .select('*')
               .where({ id: res.body.id })
               .first()

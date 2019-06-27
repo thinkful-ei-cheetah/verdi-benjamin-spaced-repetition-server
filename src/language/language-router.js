@@ -3,6 +3,7 @@
 const express = require('express');
 const LanguageService = require('./language-service');
 const { requireAuth } = require('../middleware/jwt-auth');
+const jsonBodyParser = express.json();
 
 const languageRouter = express.Router();
 
@@ -48,7 +49,7 @@ languageRouter
 languageRouter
   .get('/head', async (req, res, next) => {
     try {
-      const word = await LanguageService.getNextWord(
+      const word = await LanguageService.getWord(
         req.app.get('db'),
         req.language.head
       );
@@ -59,6 +60,7 @@ languageRouter
           wordCorrectCount: word.correct_count,
           wordIncorrectCount: word.incorrect_count,
       });
+      req.word = word;
       next();
     } catch (error) {
       next(error);
@@ -67,21 +69,40 @@ languageRouter
   });
 
 languageRouter
-  .post('/guess', async (req, res, next) => {
+  .route('/guess')
+  .post(requireAuth, jsonBodyParser, async (req, res, next) => {
     try {
-      const { answer } = req.body;
+      const { guess } = req.body;
 
+      if (!guess) {
+        return res.status(400).json({
+          error: `Missing 'guess' in request body`
+        })
+      }
       
-
       const result = await LanguageService.getResult(
         req.app.get('db'),
-        answer
+        req.language.head,
+        guess
+        );
+
+      const currentWord = await LanguageService.getWord(
+        req.app.get('db'),
+        req.language.head
       );
 
-
+      const nextWord = await LanguageService.getWord(
+        req.app.get('db'),
+        currentWord.next
+      );
 
       res.json({
-   
+          anextWord: nextWord.original,
+          totalScore: req.language.total_score,
+          wordCorrectCount: currentWord.correct_count,
+          wordIncorrectCount: currentWord.incorrect_count,
+          answer: currentWord.translation,
+          isCorrect: result,
       });
       next();
     } catch (error) {

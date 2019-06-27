@@ -32,19 +32,61 @@ const LanguageService = {
       .where({ language_id });
   },
 
-  getNextWord(db, id) {
+  getWord(db, id) {
     return db
       .from('word')
       .first(
         'original',
         'correct_count',
         'incorrect_count',
+        'translation',
+        'memory_value',
+        'next',
+        'language_id',
       )
       .where({ id })
   },
 
-  getResult(db, something) {
-    const sll = new LinkedList();
+  getResult(db, id, answer) {
+    
+    const word = db
+    .from('word')
+    .first(
+      'translation',
+      'correct_count',
+      'incorrect_count',
+      'memory_value',
+      'next',
+      'language_id',
+      )
+      .where({ id })
+
+    const { next: head, language_id } = word;
+    db
+      .from('language')
+      .where('language_id', language_id)
+      .update({ head })
+    
+    if (word.translation === answer) {
+      let { memory_value: memVal } = word;
+      memVal = memVal * 2;
+
+      db
+        .from('word')
+        .where({ id })
+        .increment('correct_count', 1)
+        .update('memory_value', memval);
+      
+      return true;
+    } else {
+      db
+        .from('word')
+        .where({ id })
+        .increment('incorrect_count', 1)
+        .update('memory_value', 1);
+
+      return false;
+    }
   }
 
   
