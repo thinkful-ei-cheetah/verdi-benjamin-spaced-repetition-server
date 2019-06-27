@@ -98,7 +98,7 @@ const LanguageService = {
     await db
       .from('word')
       .where({ id })
-      .update('memory_value', 1)
+      .update('memory_value', 1);
 
     return;
   },
@@ -111,7 +111,7 @@ const LanguageService = {
       )
       .where('id', language_id)
       .then(res => res.total_score);
-    },
+  },
 
   createLinkedList(words) {
     sll.head = null;
@@ -120,7 +120,7 @@ const LanguageService = {
       sll.insertLast({
         original: words[i].original,
         id: words[i].id,
-      })
+      });
     }
 
     sll.display();
@@ -135,7 +135,7 @@ const LanguageService = {
     sll.remove(insertWord);
 
     if (memVal >= sll.size()) {
-      insertLast(insertWord)
+      sll.insertLast(insertWord);
     } else {
       sll.insertAt(
         insertWord, 
@@ -150,7 +150,7 @@ const LanguageService = {
     return db
       .from('word')
       .where({ original })
-      .update({ next })
+      .update({ next });
   },
 
   async updateDB(db) {
