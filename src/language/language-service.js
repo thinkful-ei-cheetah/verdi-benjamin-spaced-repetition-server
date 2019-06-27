@@ -135,7 +135,7 @@ const LanguageService = {
     sll.remove(insertWord);
 
     if (memVal >= sll.size()) {
-      insertLast(insertWord)
+      sll.insertLast(insertWord)
     } else {
       sll.insertAt(
         insertWord, 
