@@ -38,6 +38,7 @@ const LanguageService = {
     return db
       .from('word')
       .first(
+        'id',
         'original',
         'correct_count',
         'incorrect_count',
@@ -128,25 +129,52 @@ const LanguageService = {
     sll.head = null;
 
     for (let i = 0; i < words.length; i++) {
-      sll.insertLast(words[i].original, words[i].next)
+      sll.insertLast({
+        original: words[i].original,
+        id: words[i].id,
+      })
     }
 
     sll.display();
   },
 
   updateLinkedList(word, memVal) {
-    console.log('removing', word.original, 'memVal', memVal);
-    sll.remove(word.original);
-    sll.insertAt(word.original, memVal);
+    console.log('removing', word.original, word.id, 'memVal', memVal);
+    sll.remove({
+      original: word.original,
+      id: word.id
+    });
+    console.log('removed');
+    sll.display();
+
+    sll.insertAt({
+      original: word.original,
+      id: word.id
+      }, 
+      memVal
+    );
     
     console.log('new list');
     sll.display();
   },
 
-  updateDB(db) {
+  updateNext(db, original, next) {
+    return db
+      .from('word')
+      .where({ original })
+      .update({ next })
+  },
 
-    // while thing !== null
-    // LL.next -> db.next
+  async updateDB(db) {
+    let currentNode = sll.head;
+
+    while (currentNode !== null) {
+      
+
+      // await this.updateNext(db, currentNode.value, currentNode.next);
+
+      currentNode = currentNode.next;
+    }
   }
 };
 

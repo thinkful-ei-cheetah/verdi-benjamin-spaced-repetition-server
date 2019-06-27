@@ -1,5 +1,6 @@
 'use strict';
 const _Node = require('./Node');
+const _ = require('underscore');
 
 class LinkedList {
   constructor() {
@@ -98,7 +99,8 @@ class LinkedList {
       return null;
     }
     // If the node to be removed is head, make the next node head
-    if (this.head.value === item) {
+    if (_.isEqual(this.head.value, item)) {
+      console.log('removing head')
       this.head = this.head.next;
       return;
     }
@@ -107,7 +109,7 @@ class LinkedList {
     // Keep track of previous
     let previousNode = this.head;
 
-    while (currNode !== null && currNode.value !== item) {
+    while (currNode !== null && !_.isEqual(currNode.value, item)) {
       // Save the previous node
       previousNode = currNode;
       currNode = currNode.next;
