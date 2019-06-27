@@ -73,6 +73,8 @@ languageRouter
   .post(requireAuth, jsonBodyParser, async (req, res, next) => {
     try {
       const { guess } = req.body;
+      const { id: lang_id, head } = req.language;
+      let result;
 
       if (!guess) {
         return res.status(400).json({
@@ -80,15 +82,31 @@ languageRouter
         })
       }
       
-      const result = await LanguageService.getResult(
-        req.app.get('db'),
-        req.language.head,
-        guess
-        );
-
       const currentWord = await LanguageService.getWord(
         req.app.get('db'),
-        req.language.head
+        head,
+        );
+      
+      if (guess === currentWord.translation) {
+        result = true;
+        await LanguageService.incrementTotal(
+          req.app.get('db'),
+          lang_id
+        );
+        await LanguageService.correctAnswer(
+          req.app.get('db'),
+          currentWord);
+      } else {
+        result = false;
+        await LanguageService.incorrectAnswer(
+          req.app.get('db'),
+          currentWord.id);
+      }
+
+      await LanguageService.updateHead(
+        req.app.get('db'),
+        lang_id,
+        currentWord.next
       );
 
       const nextWord = await LanguageService.getWord(
@@ -96,11 +114,16 @@ languageRouter
         currentWord.next
       );
 
+      const score = await LanguageService.getTotalScore(
+        req.app.get('db'),
+        lang_id
+      );
+
       res.json({
-          anextWord: nextWord.original,
-          totalScore: req.language.total_score,
-          wordCorrectCount: currentWord.correct_count,
-          wordIncorrectCount: currentWord.incorrect_count,
+          nextWord: nextWord.original,
+          totalScore: score.total_score,
+          wordCorrectCount: nextWord.correct_count,
+          wordIncorrectCount: nextWord.incorrect_count,
           answer: currentWord.translation,
           isCorrect: result,
       });
