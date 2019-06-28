@@ -1,8 +1,11 @@
 {
-  "name": "express-boilerplate",
+  "name": "bonjour-server",
   "version": "0.0.1",
   "description": "",
   "main": "src/server.js",
+  "engines": {
+    "node": "11.14.0"
+  },
   "scripts": {
     "test": "mocha --require test/setup.js",
     "dev": "nodemon src/server.js",
@@ -12,7 +15,7 @@
     "deploy": "git push heroku master"
   },
   "keywords": [],
-  "author": "Tom `tomatao` HT <tomht@thinkful.com>",
+  "author": "Benjamin Tilghman",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

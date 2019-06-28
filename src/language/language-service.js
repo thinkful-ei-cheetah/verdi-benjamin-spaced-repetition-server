@@ -1,6 +1,5 @@
 'use strict';
 const LinkedList = require('../LinkedList');
-// const knex = require('knex');
 const sll = new LinkedList();
 
 const LanguageService = {
