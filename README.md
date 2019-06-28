@@ -59,7 +59,7 @@ POST calls will register a user and must include a body with 'password', 'userna
 Passwords must be at least eight characters long and include a symbol, uppercase letter, lowercase letter, and number.
 
 sample request:
-
+```
 fetch(`${config.API_ENDPOINT}/user`, {
       method: 'POST',
       headers: {
@@ -70,6 +70,7 @@ fetch(`${config.API_ENDPOINT}/user`, {
         username: 'username',
         password: [valid password],
       }),
+```
 
 ## /api/auth
 
@@ -77,8 +78,8 @@ POST calls will log in a user and must include a body with 'username' and  'pass
 
 This endpoint will return a jwt token which authorizes the user to ender the /api/language endpoint.
 
-sample request
-
+sample request:
+```
 fetch(`${config.API_ENDPOINT}/auth/token`, {
       method: 'POST',
       headers: {
@@ -88,18 +89,20 @@ fetch(`${config.API_ENDPOINT}/auth/token`, {
         username: 'username', 
         password: [valid password] 
       })
+```
 
 ## /api/language
 
 A GET call to this endpoint, when logged in, will return an object with the language and an array of the user's words. The request must have an 'Authorization' header with the value 'Bearer' and the token returned by entering a username and password at the /api/auth endpoint.
 
-sample request
-
+sample request:
+```
 fetch(`${config.API_ENDPOINT}/language`, {
       headers: {
         'Authorization': `Bearer ` + [token]
       }
-
+```
+```
 sample return {
     language: 'French',
     words: [
@@ -124,7 +127,7 @@ sample return {
         }
     ],
 }
-
+```
 ## api/language/head
 
 A GET call to this endpoint will return the first word for the user to translate, the user's total score, the number of times the user has gotten the word correct, and the number of times the user has gotten the word incorrect.
@@ -132,19 +135,20 @@ A GET call to this endpoint will return the first word for the user to translate
 The request must have an 'Authorization' header with the value 'Bearer' and the token returned by entering a username and password at the /api/auth endpoint.
 
 sample request:
-
+```
 fetch(`${config.API_ENDPOINT}/language/head`, {
       headers: {
         'Authorization': `Bearer ` + [token]
       }
-
+```
+```
 sample return {
     nextWord: 'original 1',
     totalScore: 0,
     wordCorrectCount: 0,
     wordIncorrectCount: 0,
 }
-
+```
 ## api/language/guess
 
 A POST call to this endpoint must include a body with a 'guess' key.
@@ -153,7 +157,8 @@ The endpoint will return the user's total score, the next word, the correct and 
 
 sample request:
 
-etch(`${config.API_ENDPOINT}/language/guess`, {
+```
+fetch(`${config.API_ENDPOINT}/language/guess`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -162,7 +167,8 @@ etch(`${config.API_ENDPOINT}/language/guess`, {
       body: JSON.stringify({
           guess: 'original 1'
       })
-
+```
+```
 sample return {
     nextWord: 'original 2',
     totalScore: 1,
@@ -171,6 +177,7 @@ sample return {
     answer: 'original 1',
     isCorrect: true,
 }
+```
     
 ## Technology
 
