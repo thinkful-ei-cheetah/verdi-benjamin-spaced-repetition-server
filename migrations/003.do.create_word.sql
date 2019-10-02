@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS "word";
+
 CREATE TABLE "word" (
   "id" SERIAL PRIMARY KEY,
   "original" TEXT NOT NULL,

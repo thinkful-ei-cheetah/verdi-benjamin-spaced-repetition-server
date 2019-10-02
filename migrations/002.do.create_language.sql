@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS "language";
+
 CREATE TABLE "language" (
   "id" SERIAL PRIMARY KEY,
   "name" TEXT NOT NULL,
